@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You 💕</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd6e8, #ffeef5);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* STICKER BACKGROUND */
+    .sticker {
+      position: fixed;
+      font-size: 20px;
+      opacity: 0.85;
+      animation: floatSticker linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes floatSticker {
+      from { transform: translateY(110vh) rotate(0deg); }
+      to { transform: translateY(-120vh) rotate(360deg); }
+    }
+
+    /* CENTER CARD */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 340px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    h1 { color: #e75480; }
+    p { color: #555; }
+
+    input {
+      padding: 10px;
+      width: 90%;
+      border-radius: 10px;
+      border: 1px solid #f3aac4;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px;
+      width: 100%;
+      background: #e75480;
+      border: none;
+      color: white;
+      border-radius: 20px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #d9436f; }
+
+    .icons { font-size: 28px; margin-bottom: 10px; }
+    .message { margin-top: 10px; color: #c2185b; font-weight: bold; }
+    .hidden { display: none; }
+
+    /* ENVELOPE */
+    .envelope {
+      width: 120px;
+      height: 80px;
+      background: #ff8fb1;
+      margin: 25px auto;
+      border-radius: 8px;
+      cursor: pointer;
+      animation: bounce 1.5s infinite;
+      position: relative;
+    }
+
+    .envelope::before {
+      content: "";
+      position: absolute;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      border-top: 40px solid #ffb6cc;
+    }
+
+    .envelope::after {
+      content: "💌";
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 26px;
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+  <div class="card">
+
+    <!-- SCREEN 1 -->
+    <div id="s1">
+      <div class="icons">🍕 🧋</div>
+      <h1>Hey you 💕</h1>
+      <p>Before we continue… tell me your name 😌</p>
+      <input id="nameInput" placeholder="Type your name">
+      <button onclick="checkName()">Continue</button>
+      <div class="message" id="nameMsg"></div>
+    </div>
+
+    <!-- SCREEN 2 -->
+    <div id="s2" class="hidden">
+      <h1>Okayyy 😌</h1>
+      <p>How much do you love me?</p>
+      <button onclick="goEnvelope()">Enough to be with me forever 💕</button>
+      <button onclick="goEnvelope()">Option 1 😏</button>
+    </div>
+
+    <!-- SCREEN 3 -->
+    <div id="s3" class="hidden">
+      <h1>Waittt 💕</h1>
+      <p>click me 👇</p>
+      <div class="envelope" onclick="openEnvelope()"></div>
+    </div>
+
+    <!-- SCREEN 4 -->
+    <div id="s4" class="hidden">
+      <h1>One last question 💘</h1>
+      <p>Will you be my Valentine?</p>
+      <button onclick="yes()">YES 💕</button>
+      <button id="noBtn" onclick="no()">NO 😏</button>
+      <div class="message" id="finalMsg"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* BACKGROUND STICKERS */
+  const stickers = ["🍕","💖","💕","💘"];
+
+  for (let i = 0; i < 45; i++) {
+    createSticker();
+  }
+
+  function createSticker() {
+    const s = document.createElement("div");
+    s.className = "sticker";
+    s.innerText = stickers[Math.floor(Math.random() * stickers.length)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.fontSize = 18 + Math.random() * 20 + "px";
+    s.style.animationDuration = 12 + Math.random() * 10 + "s";
+    s.style.animationDelay = Math.random() * 10 + "s";
+    document.body.appendChild(s);
+  }
+
+  /* FLOW LOGIC */
+  let tries = 0;
+
+  function checkName() {
+    const v = nameInput.value.trim().toLowerCase();
+    if (v === "lyna arora") {
+      nameMsg.style.color = "green";
+      nameMsg.innerText = "that’s my good girl 💕";
+      setTimeout(() => {
+        s1.classList.add("hidden");
+        s2.classList.remove("hidden");
+      }, 1200);
+    } else {
+      tries++;
+      nameMsg.innerText = tries === 1
+        ? "Babygirl think again 😏"
+        : "Hint: try my last name 😉";
+    }
+  }
+
+  function goEnvelope() {
+    s2.classList.add("hidden");
+    s3.classList.remove("hidden");
+  }
+
+  function openEnvelope() {
+    s3.classList.add("hidden");
+    s4.classList.remove("hidden");
+  }
+
+  function no() {
+    noBtn.style.display = "none";
+    finalMsg.innerText = "you don’t have any other choice 😌";
+  }
+
+  function yes() {
+    finalMsg.style.color = "green";
+    finalMsg.innerText = "YAYYY 💖 my Valentine forever 🍕🧋";
+  }
+</script>
+
+</body>
+</html>
