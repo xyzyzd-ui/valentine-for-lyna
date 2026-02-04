@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You 💕</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #ffe6f0;
+      overflow: hidden;
+    }
+
+    /* STICKER BACKGROUND */
+    .sticker-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 60px);
+      grid-auto-rows: 60px;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .sticker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      opacity: 0.9;
+    }
+
+    /* TEXT BACKGROUND */
+    .text-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 180px);
+      grid-auto-rows: 120px;
+      align-items: center;
+      justify-items: center;
+      font-size: 20px;
+      color: rgba(231, 84, 128, 0.25);
+      font-weight: bold;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 340px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    h1 { color: #e75480; }
+    p { color: #555; }
+
+    button {
+      margin-top: 14px;
+      padding: 10px;
+      width: 100%;
+      background: #e75480;
+      border: none;
+      color: white;
+      border-radius: 20px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .hidden { display: none; }
+
+    /* TYPING SCREEN */
+    .typing-screen {
+      text-align: center;
+    }
+
+    .typing-text {
+      font-size: 18px;
+      color: #e75480;
+      min-height: 80px;
+    }
+
+    .typing-big {
+      font-size: 28px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="sticker-bg" id="stickerBg"></div>
+<div class="text-bg hidden" id="textBg"></div>
+
+<div class="wrapper">
+  <div class="card">
+
+    <!-- KIDS QUESTION -->
+    <div id="sKids">
+      <h1>One more question 😌</h1>
+      <p>How many kids do you want with me?</p>
+      <button onclick="kidsWrong()">2</button>
+      <button onclick="kidsWrong()">1</button>
+      <button onclick="kidsRight()">Many 😌💖</button>
+      <p id="kidsMsg"></p>
+    </div>
+
+    <!-- TYPING SCREEN -->
+    <div id="sTyping" class="hidden typing-screen">
+      <div id="typingText" class="typing-text"></div>
+      <button onclick="nextTyping()">Continue</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* STICKERS */
+  const stickerBg = document.getElementById("stickerBg");
+  const emojis = ["🍕", "💖", "💕", "💘"];
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement("div");
+    s.className = "sticker";
+    s.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    stickerBg.appendChild(s);
+  }
+
+  /* TEXT BG */
+  const textBg = document.getElementById("textBg");
+  for (let i = 0; i < 40; i++) {
+    const t = document.createElement("div");
+    t.innerText = "Aman ♥️ Lyna";
+    textBg.appendChild(t);
+  }
+
+  function kidsWrong() {
+    kidsMsg.innerText = "think again 😌";
+  }
+
+  function kidsRight() {
+    sKids.classList.add("hidden");
+    sTyping.classList.remove("hidden");
+    startTyping();
+  }
+
+  /* TYPING LOGIC */
+  const messages = [
+    "I know you always ask me if i would love our kids more or you",
+    "But you know what?",
+    "I will always love our kids obv i will but you who is the one person i will always love more?",
+    "their mother"
+  ];
+
+  let msgIndex = 0;
+
+  function typeMessage(text, isBig = false) {
+    const el = document.getElementById("typingText");
+    el.className = isBig ? "typing-text typing-big" : "typing-text";
+    el.innerText = "";
+    let i = 0;
+
+    const interval = setInterval(() => {
+      el.innerText += text[i];
+      i++;
+      if (i === text.length) clearInterval(interval);
+    }, 40);
+  }
+
+  function startTyping() {
+    typeMessage(messages[msgIndex]);
+  }
+
+  function nextTyping() {
+    msgIndex++;
+    if (msgIndex < messages.length) {
+      const isLast = msgIndex === messages.length - 1;
+      typeMessage(messages[msgIndex], isLast);
+    }
+  }
+</script>
+
+</body>
+</html>
