@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💕</title>
+
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #ffe6f0;
+    overflow: hidden;
+  }
+
+  .sticker-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 60px);
+    grid-auto-rows: 60px;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .sticker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    opacity: 0.9;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  }
+
+  h1 { color: #e75480; }
+
+  input {
+    padding: 10px;
+    width: 90%;
+    border-radius: 10px;
+    border: 1px solid #f3aac4;
+    font-size: 16px;
+  }
+
+  button {
+    margin-top: 12px;
+    padding: 10px;
+    width: 100%;
+    background: #e75480;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .message {
+    margin-top: 10px;
+    color: #c2185b;
+    font-weight: bold;
+  }
+
+  .hidden { display: none; }
+
+  .typing-text {
+    font-size: 18px;
+    color: #e75480;
+    line-height: 1.6;
+    min-height: 140px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+  }
+
+  .typing-big {
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  /* IMAGE STYLE */
+  .love-img {
+    width: 180px;
+    max-width: 90%;
+    margin-top: 15px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .show-img {
+    opacity: 1;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="sticker-bg" id="stickerBg"></div>
+
+<div class="wrapper">
+<div class="card">
+
+<!-- NAME -->
+<div id="s1">
+  <h1>Hey you 💕</h1>
+  <p>Before we continue… tell me your name 😌</p>
+  <input id="nameInput">
+  <button onclick="checkName()">Continue</button>
+  <div class="message" id="nameMsg"></div>
+</div>
+
+<!-- LOVE -->
+<div id="s2" class="hidden">
+  <h1>Okayyy 😌</h1>
+  <p>How much do you love me?</p>
+  <button onclick="goKids()">Enough to be with me forever 💕</button>
+  <button onclick="goKids()">Option 1 😏</button>
+</div>
+
+<!-- KIDS -->
+<div id="sKids" class="hidden">
+  <h1>One more question 😌</h1>
+  <p>How many kids do you want with me?</p>
+  <button onclick="kidsWrong()">2</button>
+  <button onclick="kidsWrong()">1</button>
+  <button onclick="kidsRight()">Many 😌💖</button>
+  <div class="message" id="kidsMsg"></div>
+</div>
+
+<!-- TYPING -->
+<div id="sTyping" class="hidden">
+  <div id="typingText" class="typing-text"></div>
+
+  <!-- IMAGE -->
+  <img src="her.JPG" id="loveImg" class="love-img">
+
+  <button onclick="nextTyping()">Continue</button>
+</div>
+
+<!-- VALENTINE -->
+<div id="sVal" class="hidden">
+  <h1>One last thing 💘</h1>
+  <p>Will you be my Valentine?not just once,but forever!</p>
+  <button onclick="yes()">YES 💕</button>
+  <button id="noBtn" onclick="no()">NO 😏</button>
+  <div class="message" id="finalMsg"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+/* STICKERS */
+const stickerBg = document.getElementById("stickerBg");
+["🍕","💖","💕","💘"].forEach(e=>{
+  for(let i=0;i<30;i++){
+    const s=document.createElement("div");
+    s.className="sticker";
+    s.innerText=e;
+    stickerBg.appendChild(s);
+  }
+});
+
+/* FLOW */
+let tries=0;
+function checkName(){
+  if(nameInput.value.trim().toLowerCase()==="lyna arora"){
+    nameMsg.innerText="that’s my good girl 💕";
+    setTimeout(()=>{s1.classList.add("hidden");s2.classList.remove("hidden")},1200);
+  } else {
+    tries++;
+    nameMsg.innerText=tries===1?"Babygirl think again 😏":"Hint: try my last name 😉";
+  }
+}
+
+function goKids(){s2.classList.add("hidden");sKids.classList.remove("hidden")}
+function kidsWrong(){kidsMsg.innerText="think again 😌"}
+function kidsRight(){sKids.classList.add("hidden");sTyping.classList.remove("hidden");startTyping()}
+
+/* TYPING */
+const messages=[
+  "I know you always ask me if i would love our kids more or you",
+  "But you know what?",
+  "I will love our kids obv i will, but you know who is the one person i will always love more?",
+  "their pretty mother♥️"
+];
+
+let idx=0;
+function typeMessage(text,big=false){
+  typingText.className=big?"typing-text typing-big":"typing-text";
+  typingText.innerText="";
+  const words=text.split(" ");
+  let i=0;
+  const t=setInterval(()=>{
+    if(i<words.length){
+      typingText.innerText+=(i===0?"":" ")+words[i++];
+    } else clearInterval(t);
+  },220);
+}
+
+function startTyping(){typeMessage(messages[0])}
+
+function nextTyping(){
+  idx++;
+  if(idx<messages.length){
+    typeMessage(messages[idx],idx===3);
+    if(idx===3){
+      setTimeout(()=>loveImg.classList.add("show-img"),1500);
+    }
+  } else {
+    sTyping.classList.add("hidden");
+    sVal.classList.remove("hidden");
+  }
+}
+
+/* FINAL */
+function no(){noBtn.style.display="none";finalMsg.innerText="you don’t have any other choice 😌"}
+function yes(){finalMsg.innerText="YAYYY 💖 my Valentine forever 🍕🧋"}
+</script>
+
+</body>
+</html>
